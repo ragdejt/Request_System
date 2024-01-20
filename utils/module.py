@@ -1,9 +1,12 @@
 #--------------------------------------------------------------------------------------------------#
 # Import necessary libraries.                                                                      #
 #--------------------------------------------------------------------------------------------------#
+import os
 import time
+from utils.ascii_text import *
 from utils.troubleshooting import *
 from pathlib import Path
+from rich import print
 from cryptography.fernet import Fernet
 #--------------------------------------------------------------------------------------------------#
 # Variables.                                                                                       #
@@ -26,37 +29,33 @@ def create_directory():
 #--------------------------------------------------------------------------------------------------#
 def date_time():
     print(time.strftime(DATE_TIME).center(100, "-"))
+    input("[Press ENTER to continue]".center(100, "-"))
 #--------------------------------------------------------------------------------------------------#
 # Add request.                                                                                     #
 #--------------------------------------------------------------------------------------------------#
 def add_request():
-    print("[Add request]".center(100, "-"))
+    print(ADD_REQUEST)
     add_name = input("[Name]: ")
     add_phone = input("[Phone]: ")
     add_address = input("[Address]: ")
     add_request = input("[Request obs]: ")
-    print(
-        "\n[Encrypting data]\n"
-        f"[Name]: {add_name}\n"
-        f"[Phone]: {add_phone}\n"
-        f"[Address]: {add_address}\n"
-        f"[Request]: {add_request}\n"
-    )
     data = (
         f"[Name]: {add_name}\n"
         f"[Phone]: {add_phone}\n"
         f"[Address]: {add_address}\n"
         f"[Request]: {add_request}\n"
     )
+    global key
     key = Fernet.generate_key()
     fernet = Fernet(key)
+    global encrypt_msg
     encrypt_msg = fernet.encrypt(data.encode())
     request_file = request_folder / (add_name + ".txt")
     if not request_file.exists():
         with open(request_file, "xb+") as file:
             file.write(encrypt_msg)
         print(
-        "\n[Encrypted data]\n"
+        "\n[!] [Encrypted data]:\n"
         f"\n{encrypt_msg}\n"
         )
     else:
@@ -65,34 +64,36 @@ def add_request():
 # Remove Request.                                                                                  #
 #--------------------------------------------------------------------------------------------------#
 def rem_request():
-    print("[Remove Request]".center(100, "-"))
-
+    print(REMOVE_REQUEST)
+    remove_choice = str(input("[Name of the request]: "))
+    remove_file = request_folder / (remove_choice + ".txt")
+    if remove_file.exists():
+        remove_file.unlink()
+        print("\n[!] [File removed]\n")
+    else:
+        print(FILE_NOT_FOUND_ERROR)
 #--------------------------------------------------------------------------------------------------#
 # List of requests.                                                                                #
 #--------------------------------------------------------------------------------------------------#
 def list_requests():
-    print("[List of requests]".center(100, "-"))
-
+    print(LIST_OF_REQUESTS)
+    for i, dir in enumerate(os.listdir(request_folder)):
+        print(f"[{i}]:[green]{dir}[/]")
 #--------------------------------------------------------------------------------------------------#
 # Read request.                                                                                    #
 #--------------------------------------------------------------------------------------------------#
 def read_request():
-    print("[Read request]".center(100, "-"))
-
+    print(READ_REQUEST)
+    read_choice = str(input("[Name of the request you want to read]: "))
+    read_file = request_folder / (read_choice + ".txt")
+    if read_file.exists():
+        pass
 #--------------------------------------------------------------------------------------------------#
 # Menu.                                                                                            #
 #--------------------------------------------------------------------------------------------------#
 def menu():
     while True:
-        print("Menu".center(100, "-"))
-        print(
-            "[Enter one of the avaliable options]:\n"
-            "[0]: [green]Exit[/]\n"
-            "[1]: [green]Add request[/]\n"
-            "[2]: [green]Remove request[/]\n"
-            "[3]: [green]List requests[/]\n"
-            "[4]: [green]Read request[/]\n"
-        )
+        print(MENU)
         try:
             menu_choice = int(input("[Your answer]: "))
             match menu_choice:
@@ -100,13 +101,19 @@ def menu():
                     exit()
                 case 1:
                     add_request()
+                    date_time()
                 case 2:
                     rem_request()
+                    date_time()
                 case 3:
                     list_requests()
+                    date_time()
                 case 4:
                     read_request()
+                    date_time()
                 case _:
                     print(VALUE_ERROR)
+                    date_time()
         except ValueError:
             print(VALUE_ERROR)
+            date_time()
