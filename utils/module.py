@@ -18,12 +18,14 @@ from cryptography.fernet import Fernet
 user_path = Path.home()
 script_path = user_path / ("Request_System")
 request_folder = script_path / ("Requests")
+key_folder = script_path / ("Keys")
 #--------------------------------------------------------------------------------------------------#
 # Create directory                                                                                 #
 #--------------------------------------------------------------------------------------------------#
 def create_directory():
     script_path.mkdir(exist_ok=True)
-    request_folder.mkdir(exist_ok=True)    
+    request_folder.mkdir(exist_ok=True)
+    key_folder.mkdir(exist_ok=True)
 #--------------------------------------------------------------------------------------------------#
 # Date / Time.                                                                                     #
 #--------------------------------------------------------------------------------------------------#
@@ -40,17 +42,17 @@ def add_request():
     add_address = input("[Address]: ")
     add_request = input("[Request obs]: ")
     data = (
-        f"[Name]: {add_name}\n"
-        f"[Phone]: {add_phone}\n"
-        f"[Address]: {add_address}\n"
-        f"[Request]: {add_request}\n"
+        f"[cyan][Name]: [green]{add_name}[/]\n"
+        f"[cyan][Phone]: [green]{add_phone}[/]\n"
+        f"[cyan][Address]: [green]{add_address}[/]\n"
+        f"[cyan][Request]: [green]{add_request}[/]\n"
     )
     key = Fernet.generate_key()
     fernet = Fernet(key)
     encrypt_msg = fernet.encrypt(data.encode())
     request_file = request_folder / (add_name + ".txt")
     if not request_file.exists():
-        key_file = request_folder / (add_name + "_key.txt")
+        key_file = key_folder / (add_name + "_key.txt")
         with open(key_file, "wb") as k_file:
             k_file.write(key)
         with open(request_file, "xb+") as file:
@@ -90,12 +92,12 @@ def read_request():
     if read_file.exists():
         with open(read_file, "rb+") as file:
             encrypted_data = file.read()
-        key_file = request_folder / (read_choice + "_key.txt")
+        key_file = key_folder / (read_choice + "_key.txt")
         with open(key_file, "rb") as key_file:
             key = key_file.read()
         fernet = Fernet(key)
         decrypted_data = fernet.decrypt(encrypted_data).decode("utf-8")
-        print(decrypted_data)
+        print(f"\n[cyan]{decrypted_data}[/]")
     else:
         print(FILE_NOT_FOUND_ERROR)
 #--------------------------------------------------------------------------------------------------#
