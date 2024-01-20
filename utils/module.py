@@ -45,13 +45,14 @@ def add_request():
         f"[Address]: {add_address}\n"
         f"[Request]: {add_request}\n"
     )
-    global key
     key = Fernet.generate_key()
     fernet = Fernet(key)
-    global encrypt_msg
     encrypt_msg = fernet.encrypt(data.encode())
     request_file = request_folder / (add_name + ".txt")
     if not request_file.exists():
+        key_file = request_folder / (add_name + "_key.txt")
+        with open(key_file, "wb") as k_file:
+            k_file.write(key)
         with open(request_file, "xb+") as file:
             file.write(encrypt_msg)
         print(
@@ -87,7 +88,16 @@ def read_request():
     read_choice = str(input("[Name of the request you want to read]: "))
     read_file = request_folder / (read_choice + ".txt")
     if read_file.exists():
-        pass
+        with open(read_file, "rb+") as file:
+            encrypted_data = file.read()
+        key_file = request_folder / (read_choice + "_key.txt")
+        with open(key_file, "rb") as key_file:
+            key = key_file.read()
+        fernet = Fernet(key)
+        decrypted_data = fernet.decrypt(encrypted_data).decode("utf-8")
+        print(decrypted_data)
+    else:
+        print(FILE_NOT_FOUND_ERROR)
 #--------------------------------------------------------------------------------------------------#
 # Menu.                                                                                            #
 #--------------------------------------------------------------------------------------------------#
