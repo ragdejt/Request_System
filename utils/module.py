@@ -3,10 +3,10 @@
 #--------------------------------------------------------------------------------------------------#
 import os
 import time
+from rich import print
+from pathlib import Path
 from utils.ascii_text import *
 from utils.troubleshooting import *
-from pathlib import Path
-from rich import print
 from cryptography.fernet import Fernet
 #--------------------------------------------------------------------------------------------------#
 # Variables.                                                                                       #

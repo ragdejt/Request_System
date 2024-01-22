@@ -184,11 +184,15 @@
 
 This script requires Python 3 and the following libraries:  
 
-* 
+* import os
 
-* 
+* import time
 
-* 
+* from rich import print
+
+* from pathlib import Path
+
+* from cryptography.fernet import Fernet
 
 # Repository
 
