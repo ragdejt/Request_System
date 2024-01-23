@@ -72,7 +72,7 @@ def rem_request():
     remove_file = request_folder / (remove_choice + ".txt")
     if remove_file.exists():
         remove_file.unlink()
-        print("\n[!] [File removed]\n")
+        print("\n[green][!] [File removed][/]\n")
     else:
         print(FILE_NOT_FOUND_ERROR)
 #--------------------------------------------------------------------------------------------------#
