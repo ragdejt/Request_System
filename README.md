@@ -4,8 +4,39 @@
 
 ***`Date Created` 20/01/2024***
 
-***`Description` This script comes with the purpose of***
+***`Description`***
 
+This script is designed to manage requests using a command-line interface.
+#
+The script defines several constants at the top, such as:
+
+- DATE_TIME
+- MODULE_NOT_FOUND_ERROR
+- FILE_NOT_FOUND_ERROR
+- FILE_EXISTS_ERROR
+- VALUE_ERROR
+- PERMISSION_ERROR
+- SYNTAX_ERROR
+- INDENTATION_ERROR
+- NAME_ERROR
+- TYPE_ERROR
+- INDEX_ERROR
+- KEY_ERROR
+- ATTRIBUTE_ERROR
+- ZERO_DIVISION_ERROR
+- IMPORT_ERROR
+
+Which are used throughout the script to provide clear and consistent error messages and prompts to the user.
+#
+The `create_directory()` function creates the necessary directories for the script to function. It creates a script directory, a request directory, and a keys directory within the script directory. It also sets the keys directory to be hidden.
+#
+The `date_time()` function prints the current date and time in a formatted manner and prompts the user to press ENTER to continue.
+#
+The `add_request()` function is designed to add a new request. It prompts the user to enter their name, phone number, address, and any observations regarding the request. The data is then encrypted using a Fernet key and saved to a text file with the name of the requester in the requests directory. A corresponding key file is also saved in the keys directory.
+#
+The `rem_request()` function is designed to remove a request. It prompts the user to enter the name of the requester and then deletes the corresponding text file from the requests directory.
+#
+The `menu()` function displays a menu of options to the user and waits for them to enter a valid option. If the user enters an invalid option, the script will display an error message and prompt the user to try again. If the user enters the option to exit the program (0), the script will exit. Otherwise, the script will call the appropriate function based on the user's selection.
 #
 
 # Security Notes
@@ -184,15 +215,9 @@
 
 This script requires Python 3 and the following libraries:  
 
-* import os
+* rich
 
-* import time
-
-* from rich import print
-
-* from pathlib import Path
-
-* from cryptography.fernet import Fernet
+* cryptography
 
 # Repository
 
