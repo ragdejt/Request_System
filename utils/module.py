@@ -26,6 +26,7 @@ def create_directory():
     script_path.mkdir(exist_ok=True)
     request_folder.mkdir(exist_ok=True)
     key_folder.mkdir(exist_ok=True)
+    os.system(f"attrib +h {key_folder}")
 #--------------------------------------------------------------------------------------------------#
 # Date / Time.                                                                                     #
 #--------------------------------------------------------------------------------------------------#
